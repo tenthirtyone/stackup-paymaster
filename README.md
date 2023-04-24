@@ -17,6 +17,15 @@ See `.env-template`
 
 [Example](https://mumbai.polygonscan.com/address/0x75A95b9a4846cFd235078063e002C351EF3fC7f7#internaltx)
 
+You can generate a signing key using the `ethers` library:
+
+```javascript
+const wallet = new ethers.Wallet(ethers.utils.randomBytes(32));
+
+console.log(wallet.address); // fund this
+console.log(wallet.privateKey); // this is STACKUP_SIGNING_KEY in .env
+```
+
 ## Installation
 
 Use the package manager [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/) to install the required dependencies for this project.
