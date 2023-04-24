@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test TS_NODE_FILES=true mocha --exit --check-leaks --throw-deprecation --trace-warnings --require ts-node/register './src/**/*.test.ts'"
+    "tsc": "tsc --build",
+    "test": "nyc --reporter lcov npm run mocha",
+    "mocha": "cross-env NODE_ENV=test TS_NODE_FILES=true mocha --exit --check-leaks --throw-deprecation --trace-warnings --require ts-node/register './src/**/*.test.ts'"
   },
   "keywords": [],
   "author": "",
@@ -16,5 +18,10 @@
     "mocha": "^10.2.0",
     "nyc": "^15.1.0",
     "ts-node": "^10.9.1"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "ethers": "^5.7.2",
+    "userop": "^0.1.5"
   }
 }
