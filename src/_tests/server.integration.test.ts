@@ -28,7 +28,7 @@ describe("Server", () => {
         `View this transaction at: https://mumbai.polygonscan.com/address/${address}#internaltx.`
       );
     }).timeout(twentySeconds);
-    it.only("deploys a 721 contract from the Factory", async () => {
+    it.skip("deploys a 721 contract from the Factory", async () => {
       const server = new Server();
       const amount = "0.001";
       const address = await server.getAddress();
