@@ -32,7 +32,11 @@ export class Server {
    * @param amount - The amount to send.
    * @returns - The transaction hash or null.
    */
-  async sendTransaction(to: string, amount: string): Promise<string | null> {
+  async sendTransaction(
+    to: string,
+    amount: string,
+    data: string = "0x"
+  ): Promise<string | null> {
     if (!this._options.signingKey) throw new Error("Signing Key is not set.");
 
     const account = await this.getAccount();
@@ -43,10 +47,11 @@ export class Server {
     );
 
     const toAddress = ethers.utils.getAddress(to);
+
     const value = ethers.utils.parseEther(amount);
 
     const response = await client.sendUserOperation(
-      account.execute(toAddress, value, "0x"),
+      account.execute(toAddress, value, data),
       { onBuild: (op) => console.log("Signed UserOp:", op) }
     );
 
@@ -55,6 +60,49 @@ export class Server {
     const paymasterTx = await response.wait();
 
     return paymasterTx?.transactionHash ?? null;
+  }
+
+  async deploy721(name: string, symbol: string) {
+    const account = await this.getAccount();
+
+    account.setCallGasLimit("16450551");
+    account.setVerificationGasLimit("16450551");
+    account.setPreVerificationGas("16450551");
+    account.setCallGasLimit("16450551");
+
+    console.log(account.getCallGasLimit());
+    console.log(account.getVerificationGasLimit());
+    console.log(account.getPreVerificationGas());
+
+    const client = await Client.init(
+      this._options.rpcUrl,
+      this._options.entryPoint
+    );
+
+    const provider = new ethers.providers.JsonRpcProvider(this._options.rpcUrl);
+    const nftFactoryAddress = "0xc7168ea599594418394ABaE04Fb628C347cA37C2";
+    const Factory_ABI = [
+      "function deploy721(string memory name_, string memory symbol_) external returns (address)",
+    ];
+    const nftFactory = new ethers.Contract(
+      nftFactoryAddress,
+      Factory_ABI,
+      provider
+    );
+
+    const res = await client.sendUserOperation(
+      account.execute(
+        nftFactoryAddress,
+        0,
+        nftFactory.interface.encodeFunctionData("deploy721", [name, symbol])
+      ),
+      { onBuild: (op) => console.log("Signed UserOperation:", op) }
+    );
+    console.log(`UserOpHash: ${res.userOpHash}`);
+
+    console.log("Waiting for transaction...");
+    const ev = await res.wait();
+    console.log(`Transaction hash: ${ev?.transactionHash ?? null}`);
   }
 
   /**
