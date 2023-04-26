@@ -28,13 +28,7 @@ console.log(wallet.privateKey); // this is STACKUP_SIGNING_KEY in .env
 
 ## Installation
 
-Use the package manager [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/) to install the required dependencies for this project.
-
-```bash
-npm install
-```
-
-or
+Use the package manager [yarn](https://yarnpkg.com/) to install the required dependencies for this project. For now, the `userops` package requires yarn for typescript-y things.
 
 ```bash
 yarn install
