@@ -28,17 +28,5 @@ describe("Server", () => {
         `View this transaction at: https://mumbai.polygonscan.com/address/${address}#internaltx.`
       );
     }).timeout(twentySeconds);
-    it.skip("deploys a 721 contract from the Factory", async () => {
-      const server = new Server();
-      const amount = "0.001";
-      const address = await server.getAddress();
-
-      await server.deploy721("Test", "TKN");
-
-      console.log(`Sent ${amount} to ${address}.`);
-      console.log(
-        `View this transaction at: https://mumbai.polygonscan.com/address/${address}#internaltx.`
-      );
-    }).timeout(twentySeconds);
   }
 });
